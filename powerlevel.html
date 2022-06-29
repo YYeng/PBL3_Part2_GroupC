@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>Wheels of Names</title>
+        <link rel="stylesheet" href="main.css" type="text/css" />
+        <script type="text/javascript" src="../../Winwheel.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    </head>
+    <body>
+        <div align="center">
+           
+         
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td>
+                        <div class="power_controls">
+                            <br />
+                            <img id="spin_button" src="spin_off.png" alt="Spin" onClick="startSpin();" />
+                            <br /><br />
+                            &nbsp;&nbsp;
+                        </div>
+                    </td>
+                    <td width="438" height="582" class="the_wheel" align="center" valign="center">
+                        <canvas id="canvas" width="434" height="434">
+                            <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                        </canvas>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <script>
+            // Create a new wheel object specifying the parameters at creation time.
+            let theWheel = new Winwheel({
+                'numSegments'  : 5,     
+                'outerRadius'  : 212,   
+                'textFontSize' : 28,    
+                'segments'     :        
+                [
+                   {'fillStyle' : '#eae56f', 'text' : 'Italy'},
+                   {'fillStyle' : '#89f26e', 'text' : 'China'},
+                   {'fillStyle' : '#7de6ef', 'text' : 'Brazil'},
+                   {'fillStyle' : '#e7706f', 'text' : 'Malaysia'},
+                   {'fillStyle' : '#eae56f', 'text' : 'India'}
+                ],
+                'animation' :           
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 5,  //Duration in seconds
+                    'spins'    : 8,   //Default number of complete spins
+                    'callbackFinished' : alertPrize
+                }
+            });
+
+            
+            let wheelPower    = 0;
+            let wheelSpinning = false;
+
+            function powerSelected(powerLevel)
+            {
+                
+                if (wheelSpinning == false) {
+                    
+                    document.getElementById('pw1').className = "";
+                    document.getElementById('pw2').className = "";
+                    document.getElementById('pw3').className = "";
+
+                    if (powerLevel >= 1) {
+                        document.getElementById('pw1').className = "pw1";
+                    }
+
+                    if (powerLevel >= 2) {
+                        document.getElementById('pw2').className = "pw2";
+                    }
+
+                    if (powerLevel >= 3) {
+                        document.getElementById('pw3').className = "pw3";
+                    }
+
+                    wheelPower = powerLevel;
+
+                    document.getElementById('spin_button').src = "spin_on.png";
+                    document.getElementById('spin_button').className = "clickable";
+                }
+            }
+
+            function startSpin()
+            {
+                
+                if (wheelSpinning == false) {
+                    
+                    if (wheelPower == 1) {
+                        theWheel.animation.spins = 3;
+                    } else if (wheelPower == 2) {
+                        theWheel.animation.spins = 8;
+                    } else if (wheelPower == 3) {
+                        theWheel.animation.spins = 15;
+                    }
+
+                    document.getElementById('spin_button').src       = "spin_off.png";
+                    document.getElementById('spin_button').className = "";
+
+                    theWheel.startAnimation();
+
+                    wheelSpinning = true;
+                }
+            }
+
+            function resetWheel()
+            {
+                theWheel.stopAnimation(false);  
+                theWheel.rotationAngle = 0;     
+                theWheel.draw();                
+
+                document.getElementById('pw1').className = "";  
+                document.getElementById('pw2').className = "";
+                document.getElementById('pw3').className = "";
+
+                wheelSpinning = false;          
+            }
+
+            function alertPrize(indicatedSegment)
+            {
+             
+            }
+        </script>
+    </body>
+</html>
